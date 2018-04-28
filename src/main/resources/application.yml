@@ -1,2 +1,9 @@
 myspring:
     ymlurl: ymlUrl
+
+---
+spring:
+  profiles: alpha
+
+myspring:
+    ymlurl: ymlUrl-ALPHA

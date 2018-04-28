@@ -20,11 +20,11 @@ public class MyDataSourceConfig {
     @Autowired
     Environment environment;
 
-    // application.properties
+    // application.properties & application-alpha.properties
     @Value("${mainUrl}")
     String mainUrl;
 
-    // application.yml
+    // application.yml (both prod and alpha profiles together)
     @Value("${myspring.ymlurl}")
     String ymlurl;
 
@@ -76,12 +76,12 @@ public class MyDataSourceConfig {
     }
 
     @Bean
-    public static PropertySourcesPlaceholderConfigurer propertyConfig(String env){
-        // application.properties is already injected
-        String dbProperties = "datasource"+env+".properties";
-        String kafkaProperties = "kafka"+env+".properties";
+    public static PropertySourcesPlaceholderConfigurer propertyConfig(String profile){
+        // application(-alpha).properties and yml are already injected
+        String dbProperties = "datasource"+profile+".properties";
+        String kafkaProperties = "kafka"+profile+".properties";
         PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer = new PropertySourcesPlaceholderConfigurer();
-        propertySourcesPlaceholderConfigurer.setLocations(new ClassPathResource(dbProperties),new ClassPathResource(kafkaProperties)); // change with profile
+        propertySourcesPlaceholderConfigurer.setLocations(new ClassPathResource(dbProperties),new ClassPathResource(kafkaProperties));
         return propertySourcesPlaceholderConfigurer;
     }
 
