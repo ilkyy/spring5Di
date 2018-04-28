@@ -2,6 +2,7 @@ package com.myspring.dependencyinjectiondemo.config;
 
 import com.myspring.dependencyinjectiondemo.propertybean.MyDataSourceBean;
 import com.myspring.dependencyinjectiondemo.propertybean.MyKafkaBean;
+import com.myspring.dependencyinjectiondemo.propertybean.MyMainBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -15,9 +16,19 @@ import org.springframework.core.io.ClassPathResource;
 @Configuration
 public class MyDataSourceConfig {
 
+    // via environment properties
     @Autowired
     Environment environment;
 
+    // application.properties
+    @Value("${mainUrl}")
+    String mainUrl;
+
+    // application.yml
+    @Value("${myspring.ymlurl}")
+    String ymlurl;
+
+    // datasource*.properties---
     @Value("${dbusername}")
      String dbuser;
 
@@ -26,7 +37,9 @@ public class MyDataSourceConfig {
 
     @Value("${dburl}")
      String dburl;
+    //--------------------------
 
+    //kafka*.properties---------
     @Value("${kafkausername}")
     String kafkauser;
 
@@ -35,6 +48,14 @@ public class MyDataSourceConfig {
 
     @Value("${kafkaurl}")
     String kafkaurl;
+    //--------------------------
+
+    @Bean
+    public MyMainBean myMainBean(){
+        MyMainBean myMainBean = new MyMainBean();
+        myMainBean.setMainUrl("application.properties: "+mainUrl+" - application.yml: "+ymlurl);
+        return myMainBean;
+    }
 
     @Bean
     public MyDataSourceBean myDataSource(){
@@ -56,6 +77,7 @@ public class MyDataSourceConfig {
 
     @Bean
     public static PropertySourcesPlaceholderConfigurer propertyConfig(String env){
+        // application.properties is already injected
         String dbProperties = "datasource"+env+".properties";
         String kafkaProperties = "kafka"+env+".properties";
         PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer = new PropertySourcesPlaceholderConfigurer();
